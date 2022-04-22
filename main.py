@@ -1,199 +1,177 @@
 from tkinter import *
 
-light = "#dedede"
-dark = "#212121"
-back_colour = light
-fore_colour = dark
 
-root = Tk()
-root.title("Simple Calculator")
-root.iconbitmap('images/calc.ico')
+class Calculator:
+    def __init__(self, main):
+        self.var = IntVar()
+        self.sym = "0"
+        self.light = "#dedede"
+        self.dark = "#212121"
+        self.back_colour = self.light
+        self.fore_colour = self.dark
+        self.math = "clear"
+        self.total = 0
 
-options_frame = Frame(root)
-entry_frame = Frame(root)
-main_frame = Frame(root)
+        self.button_1 = Button(main, text="1", width=4, height=1, command=lambda: self.button_click(1),
+                               font="Helvetica 18")
+        self.button_2 = Button(main, text="2", width=4, height=1, command=lambda: self.button_click(2),
+                               font="Helvetica 18")
+        self.button_3 = Button(main, text="3", width=4, height=1, command=lambda: self.button_click(3),
+                               font="Helvetica 18")
+        self.button_4 = Button(main, text="4", width=4, height=1, command=lambda: self.button_click(4),
+                               font="Helvetica 18")
+        self.button_5 = Button(main, text="5", width=4, height=1, command=lambda: self.button_click(5),
+                               font="Helvetica 18")
+        self.button_6 = Button(main, text="6", width=4, height=1, command=lambda: self.button_click(6),
+                               font="Helvetica 18")
+        self.button_7 = Button(main, text="7", width=4, height=1, command=lambda: self.button_click(7),
+                               font="Helvetica 18")
+        self.button_8 = Button(main, text="8", width=4, height=1, command=lambda: self.button_click(8),
+                               font="Helvetica 18")
+        self.button_9 = Button(main, text="9", width=4, height=1, command=lambda: self.button_click(9),
+                               font="Helvetica 18")
+        self.button_0 = Button(main, text="0", width=4, height=1, command=lambda: self.button_click(0),
+                               font="Helvetica 18")
+        self.button_equal = Button(main, text="=", width=4, height=1, command=lambda: self.button_calc("="),
+                                   font="Helvetica 18")
+        self.btn_clear = Button(main, text="AC", width=4, height=1, command=self.button_clear, font="Helvetica 18")
+        self.button_add = Button(main, text="+", width=4, height=1, command=lambda: self.button_calc("+"),
+                                 font="Helvetica 18")
+        self.button_subtract = Button(main, text="-", width=4, height=1, command=lambda: self.button_calc("-"),
+                                      font="Helvetica 18")
+        self.button_multiply = Button(main, text="*", width=4, height=1, command=lambda: self.button_calc("*"),
+                                      font="Helvetica 18")
+        self.button_divide = Button(main, text="/", width=4, height=1, command=lambda: self.button_calc("/"),
+                                    font="Helvetica 18")
 
-options_frame.grid(row=0, column=0)
-entry_frame.grid(row=1, column=0)
-main_frame.grid(row=2, column=0)
+        self.dark_mode = Checkbutton(main, text="Dark Mode", variable=self.var, command=self.colour)
+        self.dark_mode.deselect()
+
+        self.entry = Entry(main, width=18, borderwidth=5, justify="right", font="Helvetica 18")
+        self.dark_mode.grid(row=0, column=1, columnspan=2)
+        self.entry.grid(row=1, column=0, columnspan=5, padx=0, pady=5)
+        self.button_7.grid(row=2, column=0)
+        self.button_8.grid(row=2, column=1)
+        self.button_9.grid(row=2, column=2)
+        self.button_divide.grid(row=2, column=3)
+        self.button_4.grid(row=3, column=0)
+        self.button_5.grid(row=3, column=1)
+        self.button_6.grid(row=3, column=2)
+        self.button_multiply.grid(row=3, column=3)
+        self.button_1.grid(row=4, column=0)
+        self.button_2.grid(row=4, column=1)
+        self.button_3.grid(row=4, column=2)
+        self.button_subtract.grid(row=4, column=3)
+        self.btn_clear.grid(row=5, column=0)
+        self.button_0.grid(row=5, column=1)
+        self.button_equal.grid(row=5, column=2)
+        self.button_add.grid(row=5, column=3)
+
+        self.entry.insert(0, "0")
+
+        root.config(bg=self.back_colour)
+        self.dark_mode.config(bg=self.back_colour, fg=self.fore_colour, selectcolor=self.back_colour,
+                              activebackground=self.back_colour, activeforeground=self.fore_colour)
+        self.entry.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_1.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_2.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_3.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_4.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_5.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_6.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_7.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_8.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_9.config(bg=self.back_colour, fg=self.fore_colour)
+        self.btn_clear.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_0.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_equal.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_add.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_subtract.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_multiply.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_divide.config(bg=self.back_colour, fg=self.fore_colour)
+
+    def colour(self):
+        mode = str(self.var.get())
+        if mode == "0":
+            self.back_colour = self.light
+            self.fore_colour = self.dark
+        elif mode == "1":
+            self.back_colour = self.dark
+            self.fore_colour = self.light
+        root.config(bg=self.back_colour)
+        self.dark_mode.config(bg=self.back_colour, fg=self.fore_colour, selectcolor=self.back_colour,
+                              activebackground=self.back_colour, activeforeground=self.fore_colour)
+        self.entry.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_1.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_2.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_3.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_4.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_5.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_6.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_7.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_8.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_9.config(bg=self.back_colour, fg=self.fore_colour)
+        self.btn_clear.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_0.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_equal.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_add.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_subtract.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_multiply.config(bg=self.back_colour, fg=self.fore_colour)
+        self.button_divide.config(bg=self.back_colour, fg=self.fore_colour)
+
+    def button_click(self, number):
+        if self.math == "equal":
+            self.entry.delete(0, END)
+            self.math = "clear"
+        if self.entry.get() == "0":
+            self.entry.delete(0, END)
+        local = self.entry.get()
+        self.entry.delete(0, END)
+        self.entry.insert(0, local + str(number))
+
+    def button_clear(self):
+        self.entry.delete(0, END)
+        self.entry.insert(0, "0")
+        self.total = 0
+        self.math = "clear"
+
+    def button_calc(self, sym):
+        # get value in entry box
+        current = int(self.entry.get())
+        # clear entry box
+        self.entry.delete(0, END)
+        # check which math function was used previously and change total accordingly
+        if self.math == "add":
+            self.total = self.total + current
+        elif self.math == "subtract":
+            self.total = self.total - current
+        elif self.math == "multiply":
+            self.total = self.total * current
+        elif self.math == "divide":
+            self.total = self.total / current
+        else:
+            self.total = current
+
+        # check if equals pressed and reset total after total value shown
+        if sym == "=":
+            self.math = "equal"
+            self.entry.insert(0, str(self.total))
+            self.total = 0
+
+        # change math value to button pressed on this function call
+        elif sym == "+":
+            self.math = "add"
+        elif sym == "-":
+            self.math = "subtract"
+        elif sym == "*":
+            self.math = "multiply"
+        elif sym == "/":
+            self.math = "divide"
 
 
-def colour():
-    global back_colour
-    global fore_colour
-    mode = var.get()
-    if mode == "Light Mode":
-        back_colour = light
-        fore_colour = dark
-    elif mode == "Dark Mode":
-        back_colour = dark
-        fore_colour = light
-    root.config(bg=back_colour)
-    options_frame.config(bg=back_colour)
-    entry_frame.config(bg=back_colour)
-    main_frame.config(bg=back_colour)
-    dark_mode.config(bg=back_colour, fg=fore_colour, selectcolor=back_colour, activebackground=back_colour,
-                     activeforeground=fore_colour)
-    apply.config(bg=back_colour, fg=fore_colour, activebackground=back_colour, activeforeground=fore_colour)
-    entry.config(bg=back_colour, fg=fore_colour)
-    button_1.config(bg=back_colour, fg=fore_colour)
-    button_2.config(bg=back_colour, fg=fore_colour)
-    button_3.config(bg=back_colour, fg=fore_colour)
-    button_4.config(bg=back_colour, fg=fore_colour)
-    button_5.config(bg=back_colour, fg=fore_colour)
-    button_6.config(bg=back_colour, fg=fore_colour)
-    button_7.config(bg=back_colour, fg=fore_colour)
-    button_8.config(bg=back_colour, fg=fore_colour)
-    button_9.config(bg=back_colour, fg=fore_colour)
-    button_clear.config(bg=back_colour, fg=fore_colour)
-    button_0.config(bg=back_colour, fg=fore_colour)
-    button_equal.config(bg=back_colour, fg=fore_colour)
-    button_add.config(bg=back_colour, fg=fore_colour)
-    button_subtract.config(bg=back_colour, fg=fore_colour)
-    button_multiply.config(bg=back_colour, fg=fore_colour)
-    button_divide.config(bg=back_colour, fg=fore_colour)
-
-
-var = StringVar()
-dark_mode = Checkbutton(options_frame, text="Dark Mode", variable=var, onvalue="Dark Mode", offvalue="Light Mode")
-dark_mode.deselect()
-dark_mode.grid(row=0, column=0)
-apply = Button(options_frame, text="Apply", command=colour)
-apply.grid(row=0, column=1)
-
-entry = Entry(entry_frame, width=18, borderwidth=5, justify="right", font="Helvetica 18")
-entry.grid(row=0, column=0, columnspan=5, padx=0, pady=5)
-entry.insert(0, "0")
-
-# global variables
-math = "clear"
-total = 0
-
-
-def button_click(number):
-    global math
-
-    if math == "equal":
-        entry.delete(0, END)
-        math = "clear"
-    if entry.get() == "0":
-        entry.delete(0, END)
-    local = entry.get()
-    entry.delete(0, END)
-    entry.insert(0, local + str(number))
-
-
-def button_clear():
-    global total
-    global math
-    entry.delete(0, END)
-    entry.insert(0, "0")
-    total = 0
-    math = "clear"
-
-
-def button_calc(sym):
-    global total
-    global math
-
-    # get value in entry box
-    current = int(entry.get())
-    # clear entry box
-    entry.delete(0, END)
-    # check which math function was used previously and change total accordingly
-    if math == "add":
-        total = total + current
-    elif math == "subtract":
-        total = total - current
-    elif math == "multiply":
-        total = total * current
-    elif math == "divide":
-        total = total / current
-    else:
-        total = current
-
-    # check if equals pressed and reset total after total value shown
-    if sym == "=":
-        math = "equal"
-        entry.insert(0, str(total))
-        total = 0
-
-    # change math value to button pressed on this function call
-    elif sym == "+":
-        math = "add"
-    elif sym == "-":
-        math = "subtract"
-    elif sym == "*":
-        math = "multiply"
-    elif sym == "/":
-        math = "divide"
-
-
-button_1 = Button(main_frame, text="1", width=4, height=1, command=lambda: button_click(1), font="Helvetica 18")
-button_2 = Button(main_frame, text="2", width=4, height=1, command=lambda: button_click(2), font="Helvetica 18")
-button_3 = Button(main_frame, text="3", width=4, height=1, command=lambda: button_click(3), font="Helvetica 18")
-button_4 = Button(main_frame, text="4", width=4, height=1, command=lambda: button_click(4), font="Helvetica 18")
-button_5 = Button(main_frame, text="5", width=4, height=1, command=lambda: button_click(5), font="Helvetica 18")
-button_6 = Button(main_frame, text="6", width=4, height=1, command=lambda: button_click(6), font="Helvetica 18")
-button_7 = Button(main_frame, text="7", width=4, height=1, command=lambda: button_click(7), font="Helvetica 18")
-button_8 = Button(main_frame, text="8", width=4, height=1, command=lambda: button_click(8), font="Helvetica 18")
-button_9 = Button(main_frame, text="9", width=4, height=1, command=lambda: button_click(9), font="Helvetica 18")
-button_0 = Button(main_frame, text="0", width=4, height=1, command=lambda: button_click(0), font="Helvetica 18")
-
-button_equal = Button(main_frame, text="=", width=4, height=1, command=lambda: button_calc("="), font="Helvetica 18")
-button_clear = Button(main_frame, text="AC", width=4, height=1, command=button_clear, font="Helvetica 18")
-
-button_add = Button(main_frame, text="+", width=4, height=1, command=lambda: button_calc("+"), font="Helvetica 18")
-button_subtract = Button(main_frame, text="-", width=4, height=1, command=lambda: button_calc("-"), font="Helvetica 18")
-button_multiply = Button(main_frame, text="*", width=4, height=1, command=lambda: button_calc("*"), font="Helvetica 18")
-button_divide = Button(main_frame, text="/", width=4, height=1, command=lambda: button_calc("/"), font="Helvetica 18")
-
-button_1.grid(row=2, column=0)
-button_2.grid(row=2, column=1)
-button_3.grid(row=2, column=2)
-
-button_4.grid(row=1, column=0)
-button_5.grid(row=1, column=1)
-button_6.grid(row=1, column=2)
-
-button_7.grid(row=0, column=0)
-button_8.grid(row=0, column=1)
-button_9.grid(row=0, column=2)
-
-button_clear.grid(row=3, column=0)
-button_0.grid(row=3, column=1)
-button_equal.grid(row=3, column=2)
-
-button_add.grid(row=0, column=4)
-button_subtract.grid(row=1, column=4)
-button_multiply.grid(row=2, column=4)
-button_divide.grid(row=3, column=4)
-
-root.config(bg=back_colour)
-root.config(bg=back_colour)
-options_frame.config(bg=back_colour)
-entry_frame.config(bg=back_colour)
-main_frame.config(bg=back_colour)
-dark_mode.config(bg=back_colour, fg=fore_colour, selectcolor=back_colour, activebackground=back_colour,
-                 activeforeground=fore_colour)
-apply.config(bg=back_colour, fg=fore_colour, activebackground=back_colour, activeforeground=fore_colour)
-entry.config(bg=back_colour, fg=fore_colour)
-button_1.config(bg=back_colour, fg=fore_colour)
-button_2.config(bg=back_colour, fg=fore_colour)
-button_3.config(bg=back_colour, fg=fore_colour)
-button_4.config(bg=back_colour, fg=fore_colour)
-button_5.config(bg=back_colour, fg=fore_colour)
-button_6.config(bg=back_colour, fg=fore_colour)
-button_7.config(bg=back_colour, fg=fore_colour)
-button_8.config(bg=back_colour, fg=fore_colour)
-button_9.config(bg=back_colour, fg=fore_colour)
-button_clear.config(bg=back_colour, fg=fore_colour)
-button_0.config(bg=back_colour, fg=fore_colour)
-button_equal.config(bg=back_colour, fg=fore_colour)
-button_add.config(bg=back_colour, fg=fore_colour)
-button_subtract.config(bg=back_colour, fg=fore_colour)
-button_multiply.config(bg=back_colour, fg=fore_colour)
-button_divide.config(bg=back_colour, fg=fore_colour)
-
-# event loop
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Simple Calculator")
+    root.iconbitmap('images/calc.ico')
+    app = Calculator(root)
+    root.mainloop()
