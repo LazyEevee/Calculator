@@ -1,7 +1,9 @@
 from tkinter import *
 
-light = "#ebebeb"
-dark = "#2b163b"
+light = "#dedede"
+dark = "#212121"
+back_colour = light
+fore_colour = dark
 
 root = Tk()
 root.title("Simple Calculator")
@@ -17,34 +19,43 @@ main_frame.grid(row=2, column=0)
 
 
 def colour():
+    global back_colour
+    global fore_colour
     mode = var.get()
-    root.config(bg=mode)
-    options_frame.config(bg=mode)
-    entry_frame.config(bg=mode)
-    main_frame.config(bg=mode)
-    dark_mode.config(bg=mode)
-    apply.config(bg=mode)
-    entry.config(bg=mode)
-    button_1.config(bg=mode)
-    button_2.config(bg=mode)
-    button_3.config(bg=mode)
-    button_4.config(bg=mode)
-    button_5.config(bg=mode)
-    button_6.config(bg=mode)
-    button_7.config(bg=mode)
-    button_8.config(bg=mode)
-    button_9.config(bg=mode)
-    button_clear.config(bg=mode)
-    button_0.config(bg=mode)
-    button_equal.config(bg=mode)
-    button_add.config(bg=mode)
-    button_subtract.config(bg=mode)
-    button_multiply.config(bg=mode)
-    button_divide.config(bg=mode)
-    
+    if mode == "Light Mode":
+        back_colour = light
+        fore_colour = dark
+    elif mode == "Dark Mode":
+        back_colour = dark
+        fore_colour = light
+    root.config(bg=back_colour)
+    options_frame.config(bg=back_colour)
+    entry_frame.config(bg=back_colour)
+    main_frame.config(bg=back_colour)
+    dark_mode.config(bg=back_colour, fg=fore_colour, selectcolor=back_colour, activebackground=back_colour,
+                     activeforeground=fore_colour)
+    apply.config(bg=back_colour, fg=fore_colour, activebackground=back_colour, activeforeground=fore_colour)
+    entry.config(bg=back_colour, fg=fore_colour)
+    button_1.config(bg=back_colour, fg=fore_colour)
+    button_2.config(bg=back_colour, fg=fore_colour)
+    button_3.config(bg=back_colour, fg=fore_colour)
+    button_4.config(bg=back_colour, fg=fore_colour)
+    button_5.config(bg=back_colour, fg=fore_colour)
+    button_6.config(bg=back_colour, fg=fore_colour)
+    button_7.config(bg=back_colour, fg=fore_colour)
+    button_8.config(bg=back_colour, fg=fore_colour)
+    button_9.config(bg=back_colour, fg=fore_colour)
+    button_clear.config(bg=back_colour, fg=fore_colour)
+    button_0.config(bg=back_colour, fg=fore_colour)
+    button_equal.config(bg=back_colour, fg=fore_colour)
+    button_add.config(bg=back_colour, fg=fore_colour)
+    button_subtract.config(bg=back_colour, fg=fore_colour)
+    button_multiply.config(bg=back_colour, fg=fore_colour)
+    button_divide.config(bg=back_colour, fg=fore_colour)
+
 
 var = StringVar()
-dark_mode = Checkbutton(options_frame, text="Dark Mode", variable=var, onvalue=dark, offvalue=light)
+dark_mode = Checkbutton(options_frame, text="Dark Mode", variable=var, onvalue="Dark Mode", offvalue="Light Mode")
 dark_mode.deselect()
 dark_mode.grid(row=0, column=0)
 apply = Button(options_frame, text="Apply", command=colour)
@@ -157,6 +168,32 @@ button_add.grid(row=0, column=4)
 button_subtract.grid(row=1, column=4)
 button_multiply.grid(row=2, column=4)
 button_divide.grid(row=3, column=4)
+
+root.config(bg=back_colour)
+root.config(bg=back_colour)
+options_frame.config(bg=back_colour)
+entry_frame.config(bg=back_colour)
+main_frame.config(bg=back_colour)
+dark_mode.config(bg=back_colour, fg=fore_colour, selectcolor=back_colour, activebackground=back_colour,
+                 activeforeground=fore_colour)
+apply.config(bg=back_colour, fg=fore_colour, activebackground=back_colour, activeforeground=fore_colour)
+entry.config(bg=back_colour, fg=fore_colour)
+button_1.config(bg=back_colour, fg=fore_colour)
+button_2.config(bg=back_colour, fg=fore_colour)
+button_3.config(bg=back_colour, fg=fore_colour)
+button_4.config(bg=back_colour, fg=fore_colour)
+button_5.config(bg=back_colour, fg=fore_colour)
+button_6.config(bg=back_colour, fg=fore_colour)
+button_7.config(bg=back_colour, fg=fore_colour)
+button_8.config(bg=back_colour, fg=fore_colour)
+button_9.config(bg=back_colour, fg=fore_colour)
+button_clear.config(bg=back_colour, fg=fore_colour)
+button_0.config(bg=back_colour, fg=fore_colour)
+button_equal.config(bg=back_colour, fg=fore_colour)
+button_add.config(bg=back_colour, fg=fore_colour)
+button_subtract.config(bg=back_colour, fg=fore_colour)
+button_multiply.config(bg=back_colour, fg=fore_colour)
+button_divide.config(bg=back_colour, fg=fore_colour)
 
 # event loop
 root.mainloop()
