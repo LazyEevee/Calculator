@@ -21,24 +21,23 @@ class Calculator:
 
         # dark mode checkbutton
         self.dark_mode = Checkbutton(main, text="Dark Mode", variable=self.var, command=self.colour)
-        self.dark_mode.grid(row=0, column=1, columnspan=2)
+        self.dark_mode.grid(row=0, column=0, columnspan=5)
         self.dark_mode.deselect()
         self.dark_mode.config(bg=self.back_colour, fg=self.fore_colour, selectcolor=self.back_colour,
                               activebackground=self.back_colour, activeforeground=self.fore_colour)
 
         # entry box
-        self.entry = Entry(main, width=18, borderwidth=5, justify="right", font="Helvetica 18")
+        self.entry = Entry(main, width=23, borderwidth=5, justify="right", font="Helvetica 18")
         self.entry.grid(row=1, column=0, columnspan=5, padx=0, pady=5)
         self.entry.insert(0, "0")
         self.entry.config(bg=self.back_colour, fg=self.fore_colour)
 
         # buttons in order of grid
-        self.buttons = ["CM", "M+", "M-", "RM",
-                        "AC", "√x", "x²", "/",
-                        "7", "8", "9", "*",
-                        "4", "5", "6", "-",
-                        "1", "2", "3", "+",
-                        "+/-", "0", ".", "="]
+        self.buttons = ["AC", "√x", "x²", "%", "/",
+                        "CM", "7", "8", "9", "*",
+                        "M+", "4", "5", "6", "-",
+                        "M-", "1", "2", "3", "+",
+                        "RM", "+/-", "0", ".", "="]
 
         self.draw_buttons(self.buttons)
 
@@ -49,7 +48,7 @@ class Calculator:
             button = Button(self.main, text=c, width=4, height=1,
                             bg=self.back_colour, fg=self.fore_colour,
                             font="Helvetica 18")
-            button.grid(row=int(i / 4) + 2, column=(i % 4))
+            button.grid(row=int(i / 5) + 2, column=(i % 5))
             # add command depending on which button drawn
             if c in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."):
                 button.config(command=lambda b=c: self.button_click(b))
@@ -63,6 +62,8 @@ class Calculator:
                 button.config(command=self.squared)
             elif c in ("CM", "M+", "M-", "RM"):
                 button.config(command=lambda b=c: self.memory_func(b))
+            elif c == "%":
+                button.config(command=self.percentage)
             elif c == "":
                 button.config(state=DISABLED)
             else:
@@ -212,6 +213,15 @@ class Calculator:
             self.memory += float(self.entry.get())
         if func == "M-":
             self.memory -= float(self.entry.get())
+
+    def percentage(self):
+        # get value in entry box
+        current = float(self.entry.get())
+        # clear entry box
+        self.entry.delete(0, END)
+        # check which math function was used previously and change total accordingly
+        current = (current / 100)
+        self.entry.insert(0, str(current))
 
 
 if __name__ == "__main__":
