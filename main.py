@@ -1,4 +1,5 @@
 from tkinter import *
+from math import sqrt
 
 
 class Calculator:
@@ -31,7 +32,7 @@ class Calculator:
         self.entry.config(bg=self.back_colour, fg=self.fore_colour)
 
         # buttons in order of grid
-        self.buttons = ["AC", "", "", "/",
+        self.buttons = ["AC", "√", "", "/",
                         "7", "8", "9", "*",
                         "4", "5", "6", "-",
                         "1", "2", "3", "+",
@@ -54,6 +55,8 @@ class Calculator:
                 button.config(command=self.negative_positive)
             elif c == "AC":
                 button.config(command=self.button_clear)
+            elif c == "√":
+                button.config(command=self.square_root)
             elif c == "":
                 button.config(state=DISABLED)
             else:
@@ -123,6 +126,20 @@ class Calculator:
         else:
             self.entry.insert(0, str(local))
 
+    def square_root(self):
+        # get number in entry box
+        current = float(self.entry.get())
+        # clear entry box
+        self.entry.delete(0, END)
+        result = sqrt(current)
+        # convert float to int if needed
+        if result.is_integer():
+            result = int(result)
+        # insert answer to entry
+        self.entry.insert(0, str(result))
+        # set math to equal for future calculations
+        self.math = "equal"
+
     def button_calc(self, sym):
         # get value in entry box
         current = float(self.entry.get())
@@ -144,10 +161,9 @@ class Calculator:
         if sym == "=":
             self.math = "equal"
             total = self.total
+            # convert float to int if needed
             if total.is_integer():
                 total = int(total)
-            else:
-                total = total
             self.entry.insert(0, str(total))
             self.total = 0
 
