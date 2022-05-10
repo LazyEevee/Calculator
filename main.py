@@ -14,6 +14,7 @@ class Calculator:
         self.fore_colour = self.dark
         self.math = "clear"
         self.total = 0
+        self.memory = 0.0
 
         # set background colour
         root.config(bg=self.back_colour)
@@ -32,7 +33,8 @@ class Calculator:
         self.entry.config(bg=self.back_colour, fg=self.fore_colour)
 
         # buttons in order of grid
-        self.buttons = ["AC", "√x", "x²", "/",
+        self.buttons = ["CM", "M+", "M-", "RM",
+                        "AC", "√x", "x²", "/",
                         "7", "8", "9", "*",
                         "4", "5", "6", "-",
                         "1", "2", "3", "+",
@@ -59,6 +61,8 @@ class Calculator:
                 button.config(command=self.square_root)
             elif c == "x²":
                 button.config(command=self.squared)
+            elif c in ("CM", "M+", "M-", "RM"):
+                button.config(command=lambda b=c: self.memory_func(b))
             elif c == "":
                 button.config(state=DISABLED)
             else:
@@ -192,6 +196,22 @@ class Calculator:
             self.math = "multiply"
         elif sym == "/":
             self.math = "divide"
+
+    def memory_func(self, func):
+        if func == "RM":
+            self.entry.delete(0, END)
+            local = self.memory
+            # convert float to int if needed
+            if local.is_integer():
+                local = int(local)
+            self.entry.insert(0, str(local))
+        if func == "CM":
+            self.entry.delete(0, END)
+            self.memory = 0.0
+        if func == "M+":
+            self.memory += float(self.entry.get())
+        if func == "M-":
+            self.memory -= float(self.entry.get())
 
 
 if __name__ == "__main__":
