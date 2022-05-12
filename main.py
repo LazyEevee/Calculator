@@ -8,8 +8,8 @@ class Calculator:
         self.main = None
         self.var = IntVar()
         self.sym = "0"
-        self.light = "#dedede"
-        self.dark = "#212121"
+        self.light = "#dedede"  # light grey
+        self.dark = "#212121"  # nearly black
         self.back_colour = self.light
         self.fore_colour = self.dark
         self.math = "clear"
@@ -39,13 +39,13 @@ class Calculator:
                         "M-", "1", "2", "3", "+",
                         "RM", "+/-", "0", ".", "="]
 
-        self.draw_buttons(self.buttons)
+        self.draw_buttons()
 
-    def draw_buttons(self, buttons):
+    def draw_buttons(self):
         # loop over required buttons
         i = 0
-        for c in buttons:
-            button = Button(self.main, text=c, width=4, height=1,
+        for c in self.buttons:
+            button = Button(root, text=c, width=4, height=1,
                             bg=self.back_colour, fg=self.fore_colour,
                             font="Helvetica 18")
             button.grid(row=int(i / 5) + 2, column=(i % 5))
@@ -89,7 +89,7 @@ class Calculator:
                               activebackground=self.back_colour, activeforeground=self.fore_colour)
         self.entry.config(bg=self.back_colour, fg=self.fore_colour)
         # re-draw buttons
-        self.draw_buttons(self.buttons)
+        self.draw_buttons()
 
     def num(self, number):
         # check for previous calculations
@@ -106,6 +106,11 @@ class Calculator:
         self.entry.delete(0, END)
         # add button pressed to end of number
         self.entry.insert(0, local + str(number))
+        return self.math
+
+    def reset_total(self):
+        self.total = 0
+        return self.total
 
     def clear(self):
         # clear the entry box
@@ -113,9 +118,10 @@ class Calculator:
         # insert a 0 into entry box
         self.entry.insert(0, "0")
         # set running total to 0
-        self.total = 0
+        self.reset_total()
         # set math to clear
         self.math = "clear"
+        return self.math
 
     def negative_positive(self):
         # get input and convert to float
@@ -125,8 +131,6 @@ class Calculator:
         # check if input is int or float to neaten up
         if local.is_integer():
             local = int(local)
-        else:
-            local = local
         # check if input is currently positive or negative, then change to other
         if local > 0:
             self.entry.insert(0, "-" + str(local))
@@ -137,10 +141,10 @@ class Calculator:
 
     def square_root(self):
         # get number in entry box
-        current = float(self.entry.get())
+        local = float(self.entry.get())
         # clear entry box
         self.entry.delete(0, END)
-        result = sqrt(current)
+        result = sqrt(local)
         # convert float to int if needed
         if result.is_integer():
             result = int(result)
@@ -148,13 +152,14 @@ class Calculator:
         self.entry.insert(0, str(result))
         # set math to equal for future calculations
         self.math = "equal"
+        return self.math
 
     def squared(self):
         # get number in entry box
-        current = float(self.entry.get())
+        local = float(self.entry.get())
         # clear entry box
         self.entry.delete(0, END)
-        result = pow(current, 2)
+        result = pow(local, 2)
         # convert float to int if needed
         if result.is_integer():
             result = int(result)
@@ -162,41 +167,12 @@ class Calculator:
         self.entry.insert(0, str(result))
         # set math to equal for future calculations
         self.math = "equal"
-
-    def math_state(self, current):
-
-        # check which math function was used previously and change total accordingly
-        if self.math == "add":
-            self.total = self.total + current
-        elif self.math == "subtract":
-            self.total = self.total - current
-        elif self.math == "multiply":
-            self.total = self.total * current
-        elif self.math == "divide":
-            self.total = self.total / current
-        else:
-            self.total = current
-        return self.total
-
-    def equal(self):
-        # get value in entry box
-        current = float(self.entry.get())
-        self.math_state(current)
-        # clear entry box
-        self.entry.delete(0, END)
-        # check if equals pressed and reset total after total value shown
-        self.math = "equal"
-        total = self.total
-        # convert float to int if needed
-        if total.is_integer():
-            total = int(total)
-        self.entry.insert(0, str(total))
-        self.total = 0
+        return self.math
 
     def calc(self, sym):
         # get value in entry box
-        current = float(self.entry.get())
-        self.math_state(current)
+        local = float(self.entry.get())
+        self.math_state(local)
         # clear entry box
         self.entry.delete(0, END)
         # change math value to button pressed on this function call
@@ -208,6 +184,7 @@ class Calculator:
             self.math = "multiply"
         elif sym == "/":
             self.math = "divide"
+        return self.math
 
     def memory_func(self, func):
         if func == "RM":
@@ -225,29 +202,58 @@ class Calculator:
         if func == "M-":
             self.memory -= float(self.entry.get())
 
+    def math_state(self, local):
+        # check which math function was used previously and change total accordingly
+        if self.math == "add":
+            self.total = self.total + local
+        elif self.math == "subtract":
+            self.total = self.total - local
+        elif self.math == "multiply":
+            self.total = self.total * local
+        elif self.math == "divide":
+            self.total = self.total / local
+        else:
+            self.total = local
+        return self.total
+
+    def equal(self):
+        # get value in entry box
+        local = float(self.entry.get())
+        self.math_state(local)
+        # clear entry box
+        self.entry.delete(0, END)
+        # convert float to int if needed
+        if self.total.is_integer():
+            self.total = int(self.total)
+        self.entry.insert(0, str(self.total))
+        self.reset_total()
+        self.math = "equal"
+        return self.math
+
     def percentage(self):
         # get value in entry box
-        current = float(self.entry.get())
+        local = float(self.entry.get())
         # clear entry box
         self.entry.delete(0, END)
         # check which math function was used previously and change total accordingly
-        current = (current / 100)
+        local = (local / 100)
         if self.math == "add":
-            self.total = self.total + (self.total * current)
+            self.total = self.total + (self.total * local)
         elif self.math == "subtract":
-            self.total = self.total - (self.total * current)
+            self.total = self.total - (self.total * local)
         elif self.math == "multiply":
-            self.total = self.total * current
+            self.total = self.total * local
         elif self.math == "divide":
-            self.total = self.total / current
+            self.total = self.total / local
         else:
-            self.total = current
-        total = self.total
+            self.total = local
+
         # convert float to int if needed
-        if total.is_integer():
-            total = int(total)
-        self.entry.insert(0, str(total))
+        if self.total.is_integer():
+            self.total = int(self.total)
+        self.entry.insert(0, str(self.total))
         self.math = "percent"
+        return self.math
 
 
 if __name__ == "__main__":
